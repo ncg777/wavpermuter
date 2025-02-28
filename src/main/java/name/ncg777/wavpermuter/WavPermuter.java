@@ -13,7 +13,7 @@ public class WavPermuter {
 
         String inputFile = args[0];
         double bpm = Double.parseDouble(args[1]);
-        int offsetMs = Integer.parseInt(args[2]);
+        double offsetMs = Double.parseDouble(args[2]);
         int n = Integer.parseInt(args[3]);
         int[] p = Arrays.stream(args[4].split(" ")).mapToInt(Integer::parseInt).toArray();  // Space-separated parsing
         String outputFile = args[5];
@@ -46,7 +46,7 @@ public class WavPermuter {
             // Apply permutation
             List<byte[]> reorderedChunks = new ArrayList<>();
             int newSize = (int)Math.ceil((double)chunks.size()/(double)n)*p.length;
-            for(int i=0;i<newSize;i++) reorderedChunks.add(new byte[0]);
+            for(int i=0;i<newSize;i++) reorderedChunks.add(null);
             for (int i = 0; i < chunks.size()/n; i++) {
                 for (int j = 0; j < p.length; j++) {
                     int targetIndex = i*p.length + j;
@@ -94,7 +94,7 @@ public class WavPermuter {
 
     private static double windowFunction(int i, int totalSamples) {
         // Hann window function
-        return Math.pow(0.5 * (1 - Math.cos(2 * Math.PI * i / (totalSamples - 1))), 1.0/12.0);
+        return Math.pow(0.5 * (1 - Math.cos(2 * Math.PI * i / (totalSamples - 1))), 1.0/8.0);
     }
 
     private static int byteArrayToSample(byte[] data, int index, int bytesPerSample) {
